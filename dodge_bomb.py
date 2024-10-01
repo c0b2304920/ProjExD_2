@@ -26,7 +26,13 @@ def check_bound(obj_rct:pg.Rect) -> tuple[bool,bool]:
         tate=False
     return yoko,tate
         
-def GameOver(scr):
+def GameOver(scr:pg.Surface)->None:
+    #演習１
+    """
+    引数：screen
+    戻り地：None
+    画面内ならTrue、画面外ならFalse
+    """
     kk_cry=pg.image.load("fig/8.png") 
     go_rct=pg.Surface((WIDTH,HEIGHT))
     pg.draw.rect(go_rct,(0,0,0),(0,0,WIDTH,HEIGHT))
@@ -34,12 +40,28 @@ def GameOver(scr):
     txt = fonto.render("Game Over",True, (255, 255, 255))
     go_rct.set_alpha(215)
     scr.blit(go_rct,[0,0])
-    scr.blit(kk_cry,[WIDTH/3-30,HEIGHT/2.2])
-    scr.blit(kk_cry,[WIDTH*2/3+30,HEIGHT/2.2])
+    scr.blit(kk_cry,[(WIDTH/3)-30,HEIGHT/2.2])
+    scr.blit(kk_cry,[(WIDTH*2/3)+30,HEIGHT/2.2])
     scr.blit(txt,[WIDTH*1.15/3,HEIGHT/2.1])
     pg.display.update()
     time.sleep(5)
     print("GameOver")
+    
+def ZoomAccs() -> tuple[list,list]:
+    #演習２
+    """
+    引数：None
+    戻り地：listのtuple
+    演習２
+    時間とともに爆弾が拡大，加速する
+    """
+    accs=[a for a in range(1,11)]
+    imgs=[]
+    for r in range(1,11):
+        bb_img=pg.Surface((20*r,20*r))
+        pg.draw.circle(bb_img,(255,0,0),(10*r,10*r),10*r)
+        imgs.append(bb_img)
+    return (accs,imgs)
     
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -49,7 +71,7 @@ def main():
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
     bb_img=pg.Surface((20,20))
-    bb_img.set_colorkey((0, 0, 0))
+    bb_accs,bb_imgs=ZoomAccs()
     pg.draw.circle(bb_img,(255,0,0),(10,10),10)
     bb_rct=bb_img.get_rect()
     bb_rct.centery=random.randint(0,WIDTH)
@@ -72,12 +94,15 @@ def main():
             if key_lst[key]:
                 sum_mv[0]+=value[0]
                 sum_mv[1]+=value[1]
-        
+        bb_img=bb_imgs[min(tmr//500,9)]
+        bb_img.set_colorkey((0, 0, 0))
         kk_rct.move_ip(sum_mv)
+        avx=vx*bb_accs[min(tmr//500,9)]#演習２
+        avy=vy*bb_accs[min(tmr//500,9)]#演習２
         if check_bound(kk_rct) !=(True,True):
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
         screen.blit(kk_img, kk_rct)
-        bb_rct.move_ip(vx,vy)
+        bb_rct.move_ip(avx,avy)
         yoko,tate=check_bound(bb_rct)
         if not yoko:
             vx*=-1
