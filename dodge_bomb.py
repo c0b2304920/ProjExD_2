@@ -15,7 +15,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
     
-    # 練習問題3
+    # 練習問題 3
     """
     引数：こうかとんRect、または、爆弾Rect
     戻り地：真理値タプル（横判定結果、縦判定結果）
