@@ -5,13 +5,25 @@ import pygame as pg
 
 
 WIDTH, HEIGHT = 1100, 650
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
 DELTA={pg.K_UP:(0, -5),
         pg.K_DOWN:(0, +5),
         pg.K_LEFT:(-5, 0),
         pg.K_RIGHT:(+5, 0)}
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-
+def check_bound(obj_rct:pg.Rect) -> tuple[bool,bool]:
+    """
+    引数：」こうかとんRect、または、爆弾Rect
+    戻り地：真理値タプル（横判定結果、縦判定結果）
+    画面内ならTrue、画面外ならFalse
+    """
+    yoko,tate=True,True
+    if obj_rct.left<0 or WIDTH < obj_rct.right:
+        yoko=False
+    if obj_rct.top<0 or HEIGHT < obj_rct.bottom:
+        tate=False
+    return yoko,tate
+        
 def main():
     """
     brnbnrgnjjjjjjjjjjjjjjjjjnri
@@ -39,22 +51,21 @@ def main():
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
-        # if key_lst[pg.K_UP]:
-        #     sum_mv[1] -= 5
-        # if key_lst[pg.K_DOWN]:
-        #     sum_mv[1] += 5
-        # if key_lst[pg.K_LEFT]:
-        #     sum_mv[0] -= 5
-        # if key_lst[pg.K_RIGHT]:
-        #     sum_mv[0] += 5
         for key,value in DELTA.items():
             if key_lst[key]:
                 sum_mv[0]+=value[0]
                 sum_mv[1]+=value[1]
         
         kk_rct.move_ip(sum_mv)
+        if check_bound(kk_rct) !=(True,True):
+            kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
         screen.blit(kk_img, kk_rct)
         bb_rct.move_ip(vx,vy)
+        yoko,tate=check_bound(bb_rct)
+        if not yoko:
+            vx*=-1
+        if not tate:
+            vy*=-1
         screen.blit(bb_img,bb_rct)
         pg.display.update()
         tmr += 1
