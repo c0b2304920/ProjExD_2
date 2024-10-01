@@ -17,7 +17,7 @@ def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
     
     # 練習問題3
     """
-    引数：」こうかとんRect、または、爆弾Rect
+    引数：こうかとんRect、または、爆弾Rect
     戻り地：真理値タプル（横判定結果、縦判定結果）
     画面内ならTrue、画面外ならFalse
     """
