@@ -111,7 +111,7 @@ def main():
                 sum_mv[0] += value[0]
                 sum_mv[1] += value[1]
                 
-        bb_img=bb_imgs[min(tmr // 500, 9)]
+        bb_img = bb_imgs[min(tmr // 500, 9)]
         bb_img.set_colorkey((0, 0, 0))
         kk_rct.move_ip(sum_mv)
         avx = vx * bb_accs[min(tmr // 500, 9)] # 演習２
